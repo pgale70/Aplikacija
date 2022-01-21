@@ -3,11 +3,14 @@ import {
   Entity,
   Index,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { ArticleFeature } from "./article-feature.entity";
+import { Article } from "./article.entity";
 import { Category } from "./category.entity";
 
 @Index("fk_feature_category_id", ["categoryId"], {})
@@ -25,6 +28,17 @@ export class Feature {
 
   @OneToMany(() => ArticleFeature, (articleFeature) => articleFeature.feature)
   articleFeatures: ArticleFeature[];
+
+  // Ovo smo ručno dodali da bi umjesto šifre za osobinu vidjeli naziv te osobine
+  //---------------------------
+  @ManyToMany(type => Article, article => article.features)
+  @JoinTable({
+    name: "article_feature",
+    joinColumn: {name: "feature_id", referencedColumnName: "featureId"},
+    inverseJoinColumn: {name: "article_id", referencedColumnName: "articleId"}
+  })
+  articles: Article[];
+  //------------------------------
 
   @ManyToOne(() => Category, (category) => category.features, {
     onDelete: "RESTRICT",
