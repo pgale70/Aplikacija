@@ -22,7 +22,7 @@ export class ArticlePrice {
   articleId: number;
 
   @Column( { type: "decimal", unsigned: true, precision: 10, scale: 2 })
-  price: string;
+  price: number;
 
   @Column( {
     type: "timestamp",
