@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post, UploadedFile, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Param, Post, Req, UploadedFile, UseInterceptors } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { Crud } from "@nestjsx/crud";
 import { Article } from "entities/article.entity";
@@ -10,6 +10,10 @@ import { StorageConfig } from "config/storage.config";
 import { PhotoService } from "src/services/photo/photo.service";
 import { Photo } from "entities/photo.entity";
 import { ApiResponse } from "src/misc/api.response.class";
+import * as fileType from 'file-type';
+// import { FileTypeResult } from "file-type/core.js";
+import * as fs from 'fs';
+import * as sharp from 'sharp';
 
 @Controller('api/article')
 @Crud({
@@ -116,8 +120,40 @@ export class ArticleController {
 
         })
     )
-    async uploadPhoto(@Param('id') articleId: number, @UploadedFile() photo): Promise<Photo | ApiResponse> {
-        let imagePath = photo.filename;
+    async uploadPhoto(
+        @Param('id') articleId: number, 
+        @UploadedFile() photo,
+        @Req() req 
+    ): Promise< ApiResponse | Photo > {
+        
+        if (req.fileFilterError) {
+            return new ApiResponse('error', -4002, req.fileFilterError);
+        }
+
+        if(!photo) {
+            return new ApiResponse('error', -4002, 'File not uploaded!');
+        }
+
+        
+        // OVDJE KOD PRAVI PROBLEM
+        const fileTypeResult = await fileType.fromFile(photo.path);
+        if (!fileTypeResult) {
+            // obrisati fajl
+            fs.unlinkSync(photo.path);
+            return new ApiResponse('error', -4002, 'Cannot detect file type!');
+        }
+
+        const realMimeType = fileTypeResult.mime;
+        if(!(realMimeType.includes('jpeg') || realMimeType.includes('png'))) {
+            fs.unlinkSync(photo.path);
+            return new ApiResponse('error', -4002, 'Bad file content type!');
+        }
+
+
+        //let imagePath = photo.filename;  ne znam čemu ovo služi
+
+        await this.createThumb(photo);
+        await this.createSmallImage(photo);
 
         const newPhoto: Photo = new Photo();
         newPhoto.articleId = articleId;
@@ -129,7 +165,45 @@ export class ArticleController {
         }
 
         return savedPhoto;
+    }
 
+    async createThumb(photo) {
+
+        const originalFilePath = photo.path;
+        const fileName = photo.filename;
+
+        const destinationFilePath = StorageConfig.photoDestination + "thumb/" + fileName;
+
+        await sharp(originalFilePath)
+            .resize({
+                fit: 'contain',   // alternativa je cover
+                width: StorageConfig.photoThumbSize.width,
+                height: StorageConfig.photoThumbSize.height,
+                background: {
+                    r: 255, g: 255, b: 255, alpha: 0.0
+                }
+            })
+            .toFile(destinationFilePath);
+    }
+
+    async createSmallImage(photo) {
+
+        const originalFilePath = photo.path;
+        const fileName = photo.filename;
+
+        const destinationFilePath = StorageConfig.photoDestination + "small/" + fileName;
+
+        await sharp(originalFilePath)
+            .resize({
+                fit: 'contain',   // alternativa je cover
+                width: StorageConfig.photoSmallSize.width,
+                height: StorageConfig.photoSmallSize.height,
+                background: {
+                    r: 255, g: 255, b: 255, alpha: 0.0
+                }
+            })
+            .toFile(destinationFilePath);
+        
     }
 
 }
