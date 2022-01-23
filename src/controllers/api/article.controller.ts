@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post, Req, UploadedFile, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Delete, Param, Post, Req, UploadedFile, UseInterceptors } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { Crud } from "@nestjsx/crud";
 import { Article } from "src/entities/article.entity";
@@ -13,6 +13,7 @@ import * as fileType from 'file-type';
 // import { FileTypeResult } from "file-type/core.js";
 import * as fs from 'fs';
 import * as sharp from 'sharp';
+import { DeleteQueryBuilder } from "typeorm";
 
 @Controller('api/article')
 @Crud({
@@ -185,5 +186,44 @@ export class ArticleController {
             })
             .toFile(destinationFilePath);
     }
+    // http
+
+    @Delete(':articleId/deletePhoto/:photoId')
+    public async deletePhoto(
+        @Param('articleId') articleId: number,
+        @Param('photoId') photoId: number,
+    ) {
+        // provjeravamo da li postoji foto koji se mečuje sa article
+        const photo = await this.photoService.findOne({
+            articleId: articleId, //prvi je iz fota a drugi je parametar rikvesta
+            photoId: photoId
+        });
+
+        //fotografija ne postoji
+        if (!photo) {
+            return new ApiResponse('error', -4004, 'Photo not found!');
+        }
+    try {
+        fs.unlinkSync(StorageConfig.photo.destination + photo.imagePath);   // brisanje u photo folderu
+        fs.unlinkSync(StorageConfig.photo.destination + 
+                      StorageConfig.photo.resize.thumb.directory +
+                      photo.imagePath);                                     // brisanje u thumb folderu
+        fs.unlinkSync(StorageConfig.photo.destination + 
+                      StorageConfig.photo.resize.small.directory +
+                      photo.imagePath);                                     // brisanje u small folderu
+    } catch (e) { }
+        
+        // brisanje u bazi podataka
+        const deleteResult = await this.photoService.deleteById(photoId);  // deleteById je definisana u photo.service.ts
+
+        if (deleteResult.affected === 0) {
+            return new ApiResponse('error', -4004, 'Photo not found!');
+        }
+
+        return new ApiResponse('ok', 0, 'One photo deleted!');
+
+
+    }
+     
 
 } 
