@@ -31,7 +31,7 @@ export class User {
   passwordHash: string;
 
   @Column( { type: "varchar", length: 64, default: () => "'0'" })
-  forname: string;
+  forename: string;
 
   @Column( { type: "varchar", length: 64, default: () => "'0'" })
   surname: string;
