@@ -27,7 +27,7 @@ export class AdministratorService {
             return admin;
         }
         return null;
- }
+    }
 
  
     getById(id: number): Promise<Administrator> {
