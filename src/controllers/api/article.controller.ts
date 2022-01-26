@@ -50,7 +50,22 @@ import { RoleCheckedGuard } from "src/misc/role.checker.guard";
         }
     },
     routes: {
-        exclude: ['updateOneBase', 'replaceOneBase', 'deleteOneBase'],
+        only: [
+            'getOneBase',
+            'getManyBase',
+        ],
+        getOneBase: {
+            decorators: [
+                UseGuards(RoleCheckedGuard),
+                AllowToRoles('administrator', 'user')
+            ],
+        },
+        getManyBase: {
+            decorators: [
+                UseGuards(RoleCheckedGuard),
+                AllowToRoles('administrator', 'user')
+            ],
+        },
     },
 })
 export class ArticleController {
