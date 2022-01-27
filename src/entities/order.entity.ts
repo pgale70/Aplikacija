@@ -6,6 +6,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import { Cart } from "./cart.entity";
 
 @Index("uq_order_cart_id", ["cartId"], { unique: true })
 @Entity("order", )
@@ -35,14 +36,24 @@ export class Order {
     default: () => "'pending'",
   })
   status: "rejected" | "accepted" | "shipped" | "pending";
-
+/*
   @OneToOne(() => Order, (order) => order.order, {
     onDelete: "RESTRICT",
     onUpdate: "CASCADE",
   })
   @JoinColumn([{ name: "cart_id", referencedColumnName: "orderId" }])
   cart: Order;
+*/
 
-  @OneToOne(() => Order, (order) => order.cart)
+@OneToOne(() => Cart, (cart) => cart.order, {
+  onDelete: "RESTRICT",
+  onUpdate: "CASCADE",
+})
+@JoinColumn([{ name: "cart_id", referencedColumnName: "cartId" }])
+cart: Order;
+
+/*
+@OneToOne(() => Order, (order) => order.cart)
   order: Order;
+*/
 }

@@ -5,10 +5,12 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { User } from "./user.entity";
 import { CartArticle } from "./cart-article.entity";
+import { Order } from "./order.entity";
 
 @Index("fk_cart_user_id", ["userId"], {})
 @Entity("cart")
@@ -36,4 +38,11 @@ export class Cart {
 
   @OneToMany(() => CartArticle, (cartArticle) => cartArticle.cart)
   cartArticles: CartArticle[];
+
+
+
+
+  @OneToOne(() => Order, (order) => order.cart)
+  order: Order;
+
 }
