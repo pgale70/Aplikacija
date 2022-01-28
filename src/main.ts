@@ -1,3 +1,4 @@
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { StorageConfig } from 'config/storage.config';
@@ -13,6 +14,8 @@ async function bootstrap() {
     maxAge: StorageConfig.photo.maxAge, // 7 dana smo ostavili da slika bude u kešu
     index: false,  // ne možemo listati sadržaj direktorijuma u kome su slike
   })
+
+  app.useGlobalPipes(new ValidationPipe());
   await app.listen(3000);
 }
 bootstrap();
