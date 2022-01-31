@@ -1070,7 +1070,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"pgale@teol.net\",\r\n    \"password\": \"Gojsina123\",\r\n    \"forename\": \"Pedja\",\r\n    \"surname\": \"Galic\",\r\n    \"phoneNumber\": \"+38765903192\",\r\n    \"postalAddress\": \"Gomiljani bb\"\r\n}",
+							"raw": "{\r\n    \"email\": \"pgale1@teol.net\",\r\n    \"password\": \"Goj\",\r\n    \"forename\": \"Pedja1\",\r\n    \"surname\": \"Galic1\",\r\n    \"phoneNumber\": \"+38765902192\",\r\n    \"postalAddress\": \"Tamo daleko bb\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1615,6 +1615,110 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Cart and Order",
+			"item": [
+				{
+					"name": "Get new cart request",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/user/cart/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"user",
+								"cart",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add article in cart",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"articleId\": 1,\r\n    \"quantity\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/user/cart/addToCart/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"user",
+								"cart",
+								"addToCart",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change article quantity in current cart",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/user/cart/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"user",
+								"cart",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Make a new order for the current cart",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/user/cart/makeOrder/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"user",
+								"cart",
+								"makeOrder",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"auth": {
@@ -1622,7 +1726,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW5pc3RyYXRvciIsImlkIjoxNiwiaWRlbnRpdHkiOiJhZG1pbiIsImV4cCI6MTY0NDM5OTc2NS40OTYsImlwIjoiOjoxIiwidWEiOiJQb3N0bWFuUnVudGltZS83LjI4LjQiLCJpYXQiOjE2NDMxOTAxNjV9.NnIzHJ5P6ONYXfxdj2LZbfZEVk5cDONXU3wBdPzTAIQ",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoidXNlciIsImlkIjo0LCJpZGVudGl0eSI6InRlc3QyQHRlc3QucnMiLCJleHAiOjE2NDQ0ODA3NzIuNTI0LCJpcCI6Ijo6MSIsInVhIjoiUG9zdG1hblJ1bnRpbWUvNy4yOC40IiwiaWF0IjoxNjQzMjcxMTcyfQ.3uxmps2tbGoUWzkUY6f1xtaxXFvbUCf5J058XFhAA5M",
 				"type": "string"
 			}
 		]
