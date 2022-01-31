@@ -29,18 +29,17 @@ export class Cart {
   })
   createdAt: Date | null;
 
+  //----------------------------------
   @ManyToOne(() => User, (user) => user.carts, {
     onDelete: "RESTRICT",
     onUpdate: "CASCADE",
   })
   @JoinColumn([{ name: "user_id", referencedColumnName: "userId" }])
   user: User;
+//-------------------------------------
 
   @OneToMany(() => CartArticle, (cartArticle) => cartArticle.cart)
   cartArticles: CartArticle[];
-
-
-
 
   @OneToOne(() => Order, (order) => order.cart)
   order: Order;

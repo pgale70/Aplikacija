@@ -68,6 +68,7 @@ export class User {
   @Validator.Length(10,512)
   postalAddress: string;
 
+  //-----------------------------
   @OneToMany(() => Cart, (cart) => cart.user)
   carts: Cart[];
 }

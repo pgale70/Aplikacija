@@ -54,7 +54,8 @@ export class Order {
   onUpdate: "CASCADE",
 })
 @JoinColumn([{ name: "cart_id", referencedColumnName: "cartId" }])
-cart: Order;
+//cart: Order;
+cart:Cart
 
 /*
 @OneToOne(() => Order, (order) => order.cart)
