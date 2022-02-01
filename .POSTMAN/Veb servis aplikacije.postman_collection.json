@@ -893,8 +893,49 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Search articles",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"categoryId\": 5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/article/search/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"article",
+								"search",
+								""
+							]
+						}
+					},
+					"response": []
 				}
 			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoidXNlciIsImlkIjoxMCwiaWRlbnRpdHkiOiJwZ2FsZUB0ZW9sLm5ldCIsImV4cCI6MTY0MzcxNjc0MS42MDQsImlwIjoiOjoxIiwidWEiOiJQb3N0bWFuUnVudGltZS83LjI4LjQiLCJpYXQiOjE2NDM3MTY0NDF9.LbZ4bPTFIO9pOT9phM_iFnHNjnt3KkZVJN4T4jH4f98",
+						"type": "string"
+					}
+				]
+			},
 			"event": [
 				{
 					"listen": "prerequest",
@@ -1039,7 +1080,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"test2@test.rs\",\r\n    \"password\": \"abc\"\r\n}",
+							"raw": "{\r\n    \"email\": \"pgale2@teol.net\",\r\n    \"password\": \"Goj1234\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1224,6 +1265,36 @@
 							"body": "{\n    \"status\": \"error\",\n    \"statusCode\": -6001,\n    \"message\": \"This user account cannt be created.\"\n}"
 						}
 					]
+				},
+				{
+					"name": "Refresh user token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoidXNlciIsImlkIjoxMCwiaWRlbnRpdHkiOiJwZ2FsZUB0ZW9sLm5ldCIsImV4cCI6MTY0NjM5MDA3MS4zOTQsImlwIjoiOjoxIiwidWEiOiJQb3N0bWFuUnVudGltZS83LjI4LjQiLCJpYXQiOjE2NDM3MTE2NzF9.xZXl4fn1_8TKOF2hbio_PwawXF4lfoXHgRfJd5nkI3c\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/auth/user/refresh",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"auth",
+								"user",
+								"refresh"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"auth": {
@@ -1620,7 +1691,7 @@
 			"name": "Cart and Order",
 			"item": [
 				{
-					"name": "Get new cart request",
+					"name": "Get cart request",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -1719,6 +1790,94 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Order",
+			"item": [
+				{
+					"name": "Get order information",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/order/7/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"order",
+								"7",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change order status",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"newStatus\": \"rejected\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/order/7/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"order",
+								"7",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW5pc3RyYXRvciIsImlkIjoxNiwiaWRlbnRpdHkiOiJhZG1pbiIsImV4cCI6MTY0NDkwODg1MC4yMjEsImlwIjoiOjoxIiwidWEiOiJQb3N0bWFuUnVudGltZS83LjI4LjQiLCJpYXQiOjE2NDM2OTkyNTB9.zNP1AtGUC8jl7USastloUPRy-6NccyTPnJgrTF3PRlA",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
 		}
 	],
 	"auth": {
@@ -1726,7 +1885,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoidXNlciIsImlkIjo0LCJpZGVudGl0eSI6InRlc3QyQHRlc3QucnMiLCJleHAiOjE2NDQ0ODA3NzIuNTI0LCJpcCI6Ijo6MSIsInVhIjoiUG9zdG1hblJ1bnRpbWUvNy4yOC40IiwiaWF0IjoxNjQzMjcxMTcyfQ.3uxmps2tbGoUWzkUY6f1xtaxXFvbUCf5J058XFhAA5M",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoidXNlciIsImlkIjoxMCwiaWRlbnRpdHkiOiJwZ2FsZUB0ZW9sLm5ldCIsImV4cCI6MTY0NDgzODE3Mi4xMzEsImlwIjoiOjoxIiwidWEiOiJQb3N0bWFuUnVudGltZS83LjI4LjQiLCJpYXQiOjE2NDM2Mjg1NzJ9.rCV7p9NO2Jk_Rvci9oBFfprjEWsPvXT7oKEDKqN40G8",
 				"type": "string"
 			}
 		]

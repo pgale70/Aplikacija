@@ -5,9 +5,11 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+DROP DATABASE IF EXISTS `aplikacija`;
 CREATE DATABASE IF NOT EXISTS `aplikacija` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `aplikacija`;
 
+DROP TABLE IF EXISTS `administrator`;
 CREATE TABLE IF NOT EXISTS `administrator` (
   `administrator_id` int unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(32) NOT NULL DEFAULT '0',
@@ -34,6 +36,7 @@ INSERT INTO `administrator` (`administrator_id`, `username`, `password_hash`) VA
 	(19, 'admin4', '1BEE03396CC6C1C645B61C6AC87A941E7ABF5E42CE5B6CA5927B2013362756FFB4934326EBA570CA34CD4521E5AC02A31DD9FCD1BD11268A7345DED443DA1DD6');
 /*!40000 ALTER TABLE `administrator` ENABLE KEYS */;
 
+DROP TABLE IF EXISTS `article`;
 CREATE TABLE IF NOT EXISTS `article` (
   `article_id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(128) NOT NULL DEFAULT '0',
@@ -62,6 +65,7 @@ INSERT INTO `article` (`article_id`, `name`, `category_id`, `excerpt`, `descript
 	(12, 'Lptom HP 2321', 3, 'Novi laptom', 'Najbolji laptop do sada', 'available', 0, '2022-01-28 11:43:04');
 /*!40000 ALTER TABLE `article` ENABLE KEYS */;
 
+DROP TABLE IF EXISTS `article_feature`;
 CREATE TABLE IF NOT EXISTS `article_feature` (
   `article_feature_id` int unsigned NOT NULL AUTO_INCREMENT,
   `article_id` int unsigned NOT NULL DEFAULT '0',
@@ -72,7 +76,7 @@ CREATE TABLE IF NOT EXISTS `article_feature` (
   KEY `fk_article_feature_feature_id` (`feature_id`),
   CONSTRAINT `fk_article_feature_article_id` FOREIGN KEY (`article_id`) REFERENCES `article` (`article_id`) ON UPDATE CASCADE,
   CONSTRAINT `fk_article_feature_feature_id` FOREIGN KEY (`feature_id`) REFERENCES `feature` (`feature_id`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 DELETE FROM `article_feature`;
 /*!40000 ALTER TABLE `article_feature` DISABLE KEYS */;
@@ -93,9 +97,11 @@ INSERT INTO `article_feature` (`article_feature_id`, `article_id`, `feature_id`,
 	(22, 10, 1, '1TB'),
 	(23, 10, 3, 'SSD'),
 	(24, 11, 1, '1TB'),
-	(25, 11, 3, 'SSD');
+	(25, 11, 3, 'SSD'),
+	(26, 12, 4, '110');
 /*!40000 ALTER TABLE `article_feature` ENABLE KEYS */;
 
+DROP TABLE IF EXISTS `article_price`;
 CREATE TABLE IF NOT EXISTS `article_price` (
   `article_price_id` int unsigned NOT NULL AUTO_INCREMENT,
   `article_id` int unsigned NOT NULL DEFAULT '0',
@@ -104,7 +110,7 @@ CREATE TABLE IF NOT EXISTS `article_price` (
   PRIMARY KEY (`article_price_id`),
   KEY `fk_article_price_article_id` (`article_id`),
   CONSTRAINT `fk_article_price_article_id` FOREIGN KEY (`article_id`) REFERENCES `article` (`article_id`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 DELETE FROM `article_price`;
 /*!40000 ALTER TABLE `article_price` DISABLE KEYS */;
@@ -118,9 +124,11 @@ INSERT INTO `article_price` (`article_price_id`, `article_id`, `price`, `created
 	(7, 5, 25.50, '2022-01-23 20:45:09'),
 	(8, 9, 56.87, '2022-01-26 06:56:53'),
 	(9, 10, 56.87, '2022-01-26 06:57:12'),
-	(10, 11, 56.87, '2022-01-26 10:40:14');
+	(10, 11, 56.87, '2022-01-26 10:40:14'),
+	(11, 12, 2000.00, '2022-01-31 09:44:30');
 /*!40000 ALTER TABLE `article_price` ENABLE KEYS */;
 
+DROP TABLE IF EXISTS `cart`;
 CREATE TABLE IF NOT EXISTS `cart` (
   `cart_id` int unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int unsigned NOT NULL DEFAULT '0',
@@ -128,7 +136,7 @@ CREATE TABLE IF NOT EXISTS `cart` (
   PRIMARY KEY (`cart_id`),
   KEY `fk_cart_user_id` (`user_id`),
   CONSTRAINT `fk_cart_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 DELETE FROM `cart`;
 /*!40000 ALTER TABLE `cart` DISABLE KEYS */;
@@ -136,9 +144,15 @@ INSERT INTO `cart` (`cart_id`, `user_id`, `created_at`) VALUES
 	(1, 1, '2022-01-27 09:15:03'),
 	(2, 4, '2022-01-27 11:14:24'),
 	(3, 4, '2022-01-27 12:10:42'),
-	(4, 4, '2022-01-27 13:29:17');
+	(4, 4, '2022-01-27 13:29:17'),
+	(5, 8, '2022-01-31 11:07:10'),
+	(6, 10, '2022-01-31 12:29:58'),
+	(7, 10, '2022-01-31 12:36:53'),
+	(8, 10, '2022-01-31 12:41:07'),
+	(9, 10, '2022-01-31 12:41:47');
 /*!40000 ALTER TABLE `cart` ENABLE KEYS */;
 
+DROP TABLE IF EXISTS `cart_article`;
 CREATE TABLE IF NOT EXISTS `cart_article` (
   `cart_article_id` int unsigned NOT NULL AUTO_INCREMENT,
   `cart_id` int unsigned NOT NULL DEFAULT '0',
@@ -149,16 +163,23 @@ CREATE TABLE IF NOT EXISTS `cart_article` (
   KEY `fk_cart_article_article_id` (`article_id`),
   CONSTRAINT `fk_cart_article_article_id` FOREIGN KEY (`article_id`) REFERENCES `article` (`article_id`) ON UPDATE CASCADE,
   CONSTRAINT `fk_cart_article_cart_id` FOREIGN KEY (`cart_id`) REFERENCES `cart` (`cart_id`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 DELETE FROM `cart_article`;
 /*!40000 ALTER TABLE `cart_article` DISABLE KEYS */;
 INSERT INTO `cart_article` (`cart_article_id`, `cart_id`, `article_id`, `quantity`) VALUES
 	(1, 2, 1, 6),
 	(3, 3, 1, 20),
-	(4, 4, 1, 2);
+	(4, 4, 1, 2),
+	(5, 5, 1, 2),
+	(6, 5, 2, 1),
+	(7, 6, 2, 1),
+	(8, 7, 2, 1),
+	(9, 8, 2, 1),
+	(10, 9, 2, 1);
 /*!40000 ALTER TABLE `cart_article` ENABLE KEYS */;
 
+DROP TABLE IF EXISTS `category`;
 CREATE TABLE IF NOT EXISTS `category` (
   `category_id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(32) NOT NULL DEFAULT '0',
@@ -182,6 +203,7 @@ INSERT INTO `category` (`category_id`, `name`, `image_path`, `parent__category_i
 	(6, 'Hrana za mačke', './assets/images', NULL);
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 
+DROP TABLE IF EXISTS `feature`;
 CREATE TABLE IF NOT EXISTS `feature` (
   `feature_id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(32) NOT NULL DEFAULT '0',
@@ -206,6 +228,7 @@ INSERT INTO `feature` (`feature_id`, `name`, `category_id`) VALUES
 	(8, 'Vrsta utičnice', 2);
 /*!40000 ALTER TABLE `feature` ENABLE KEYS */;
 
+DROP TABLE IF EXISTS `order`;
 CREATE TABLE IF NOT EXISTS `order` (
   `order_id` int unsigned NOT NULL AUTO_INCREMENT,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -214,15 +237,20 @@ CREATE TABLE IF NOT EXISTS `order` (
   PRIMARY KEY (`order_id`),
   UNIQUE KEY `uq_order_cart_id` (`cart_id`),
   CONSTRAINT `fk_order_cart_id` FOREIGN KEY (`cart_id`) REFERENCES `cart` (`cart_id`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 DELETE FROM `order`;
 /*!40000 ALTER TABLE `order` DISABLE KEYS */;
 INSERT INTO `order` (`order_id`, `created_at`, `cart_id`, `status`) VALUES
 	(2, '2022-01-27 13:26:49', 3, 'pending'),
-	(3, '2022-01-27 13:30:18', 4, 'pending');
+	(3, '2022-01-27 13:30:18', 4, 'pending'),
+	(4, '2022-01-31 12:30:15', 6, 'pending'),
+	(5, '2022-01-31 12:37:19', 7, 'pending'),
+	(6, '2022-01-31 12:41:17', 8, 'accepted'),
+	(7, '2022-01-31 12:41:53', 9, 'rejected');
 /*!40000 ALTER TABLE `order` ENABLE KEYS */;
 
+DROP TABLE IF EXISTS `photo`;
 CREATE TABLE IF NOT EXISTS `photo` (
   `photo_id` int unsigned NOT NULL AUTO_INCREMENT,
   `article_id` int unsigned NOT NULL DEFAULT '0',
@@ -242,6 +270,7 @@ INSERT INTO `photo` (`photo_id`, `article_id`, `image_path`) VALUES
 	(7, 2, '2022123-9563931517-mojaslika.jpg');
 /*!40000 ALTER TABLE `photo` ENABLE KEYS */;
 
+DROP TABLE IF EXISTS `user`;
 CREATE TABLE IF NOT EXISTS `user` (
   `user_id` int unsigned NOT NULL AUTO_INCREMENT,
   `email` varchar(255) NOT NULL DEFAULT '0',
@@ -253,7 +282,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `uq_user_email` (`email`),
   UNIQUE KEY `uq_user_phone_number` (`phone_number`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 DELETE FROM `user`;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
@@ -261,10 +290,31 @@ INSERT INTO `user` (`user_id`, `email`, `password_hash`, `forename`, `surname`, 
 	(1, 'test@test.rs', 'B991F855E3AD0E00E7EA43F87A179209B5E31A2903F8F82A0B7B9B61E03115E723BBF1B8F6A4E7F0775209039810B0249717B70D85578496DA072AC8FC18D9F1', 'Pera', 'Peric', '+387658888', 'Gojsina bb'),
 	(3, 'test1t@test.rs', '60E59F5B74E21E18E6FCF55D610A8FB88BC5A7E231B6975199A193F72C74297EB36C1248B4EDC0248011039C5B31B45DA7DC65A32EFA23F06CE0D952833A10B0', 'Mika', 'Mikic', '+387657788', 'Gomiljani bb'),
 	(4, 'test2@test.rs', 'DDAF35A193617ABACC417349AE20413112E6FA4E89A97EA20A9EEEE64B55D39A2192992A274FC1A836BA3C23A3FEEBBD454D4423643CE80E2A9AC94FA54CA49F', 'Mika', 'Mikic', '+387666788', 'Gomiljani bb'),
-	(5, 'pgale@teol.net', '1664B958A4812A1E15D051171785ED3291E27F51C66EA2E36962D15AAB6EABA0E2325B31FFC3823BFB87774255885AC4F71346D50582B1A4B40AAA427F7A1579', 'Pedja', 'Galic', '+38765903192', 'Gomiljani bb'),
 	(7, 'pgale1@teol.net', '0E6634006853F20E710965B6BAD2ED2EA1BB477F37CA11D461324EA25DB6C780A48B560830770702D28BA8105B71DF6A41EB197EDD3AE0B1209078D51A4F35AC', 'Pedja1', 'Galic1', '+38765902192', 'Tamo daleko bb'),
-	(8, 'pgale2@teol.net', 'BA314C66C032BE0473DA1B01BF4C5E454344A3D8AD2F802394A2DA85197F741A5CA7F98178AB6B5C5A741887AA488A6317A0831447165B1EC19E51A1D14E25D6', 'Pedja1', 'Galic1', '+38765904192', 'Tamo daleko bb');
+	(8, 'pgale2@teol.net', 'BA314C66C032BE0473DA1B01BF4C5E454344A3D8AD2F802394A2DA85197F741A5CA7F98178AB6B5C5A741887AA488A6317A0831447165B1EC19E51A1D14E25D6', 'Pedja1', 'Galic1', '+38765904192', 'Tamo daleko bb'),
+	(10, 'pgale@teol.net', 'BA314C66C032BE0473DA1B01BF4C5E454344A3D8AD2F802394A2DA85197F741A5CA7F98178AB6B5C5A741887AA488A6317A0831447165B1EC19E51A1D14E25D6', 'Pedja', 'Galic', '+387659041922', 'Tamo daleko bb');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
+
+DROP TABLE IF EXISTS `user_token`;
+CREATE TABLE IF NOT EXISTS `user_token` (
+  `user_token_id` int unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int unsigned NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `token` text COLLATE utf8_unicode_ci NOT NULL,
+  `expires_at` datetime NOT NULL,
+  `is_valid` tinyint unsigned NOT NULL DEFAULT '1',
+  PRIMARY KEY (`user_token_id`),
+  KEY `fk_user_token_user_id` (`user_id`),
+  CONSTRAINT `fk_user_token_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
+
+DELETE FROM `user_token`;
+/*!40000 ALTER TABLE `user_token` DISABLE KEYS */;
+INSERT INTO `user_token` (`user_token_id`, `user_id`, `created_at`, `token`, `expires_at`, `is_valid`) VALUES
+	(1, 10, '2022-02-01 10:35:13', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoidXNlciIsImlkIjoxMCwiaWRlbnRpdHkiOiJwZ2FsZUB0ZW9sLm5ldCIsImV4cCI6MTY0NjM4NjUxMy4zNzQsImlwIjoiOjoxIiwidWEiOiJQb3N0bWFuUnVudGltZS83LjI4LjQiLCJpYXQiOjE2NDM3MDgxMTN9.xD8HhUgeJecBPQBlmvpXJBoyHUJ9Lx6D6bYqPE177ig', '2022-03-04 09:35:13', 1),
+	(2, 10, '2022-02-01 11:34:31', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoidXNlciIsImlkIjoxMCwiaWRlbnRpdHkiOiJwZ2FsZUB0ZW9sLm5ldCIsImV4cCI6MTY0NjM5MDA3MS4zOTQsImlwIjoiOjoxIiwidWEiOiJQb3N0bWFuUnVudGltZS83LjI4LjQiLCJpYXQiOjE2NDM3MTE2NzF9.xZXl4fn1_8TKOF2hbio_PwawXF4lfoXHgRfJd5nkI3c', '2022-03-04 10:34:31', 1),
+	(3, 10, '2022-02-01 12:59:06', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoidXNlciIsImlkIjoxMCwiaWRlbnRpdHkiOiJwZ2FsZUB0ZW9sLm5ldCIsImV4cCI6MTY0NjM5NTE0Ni4yNTIsImlwIjoiOjoxIiwidWEiOiJQb3N0bWFuUnVudGltZS83LjI4LjQiLCJpYXQiOjE2NDM3MTY3NDZ9.1C1YQY-741o47zCQVn6S8-ZX5Csvj3SlXg3adccei9c', '2022-03-04 11:59:06', 1);
+/*!40000 ALTER TABLE `user_token` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
