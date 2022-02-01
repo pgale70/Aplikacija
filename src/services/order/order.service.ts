@@ -49,8 +49,12 @@ export class OrderService {
         const newOrder: Order = new Order();
         newOrder.cartId = cartId;
         const savedOrder = await this.order.save(newOrder);
+        // da ne bi dva puta pisali relations ...
+        return await this.getById(savedOrder.orderId);
+    }
 
-        return await this.order.findOne(savedOrder.orderId, {
+    async getById(orderId: number) {
+        return await this.order.findOne(orderId, {
             relations: [
                 "cart",
                 "cart.user",
@@ -58,7 +62,22 @@ export class OrderService {
                 "cart.cartArticles.article",
                 "cart.cartArticles.article.category",
                 "cart.cartArticles.article.articlePrices",
-            ]
-        })
+            ],
+        });
     }
+
+   async changeStatus(orderId: number, newStatus: "rejected" | "accepted" | "shipped" | "pending") {
+       const order = await this.getById(orderId);
+
+       if(!order) {
+           return new ApiResponse("error", -9001, "No such order found");
+       }
+
+       order.status = newStatus;
+
+       await this.order.save(order);
+
+       return await this.getById(orderId);
+   }
+       
 }
