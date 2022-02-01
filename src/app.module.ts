@@ -32,6 +32,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { MailConfig } from 'config/mail.config';
 import { OrderMailer } from './services/order/order.mailer.service';
 import { AdministratorOrderControler } from './controllers/api/administrator.order.controller';
+import { UserToken } from './entities/user-token.entity';
 
 
 @Module({
@@ -55,6 +56,7 @@ import { AdministratorOrderControler } from './controllers/api/administrator.ord
         Order,
         Photo,
         User,
+        UserToken,
       ]
     }),
     TypeOrmModule.forFeature([
@@ -69,6 +71,7 @@ import { AdministratorOrderControler } from './controllers/api/administrator.ord
         Order,
         Photo,
         User,
+        UserToken,
     ]),
     MailerModule.forRoot({
       // smtps://username:password@smtp.gmail.com
